@@ -7,7 +7,7 @@ from telegram.ext import (
 )
 
 TOKEN: Final = '7191747730:AAEGCy489UISkovfPOKQKCeVSzg6iwVqQwI'
-ADMIN_ID: Final = 7018183963  # ← твой Telegram ID
+ADMIN_ID: Final = 7653881747  # ← твой Telegram ID
 
 # Определяем состояния для двух конверсаторов
 CONTACT, WAITING_FOR_REPLY = range(2)          # для "Связаться с нами"
