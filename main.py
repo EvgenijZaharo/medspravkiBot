@@ -1,4 +1,4 @@
-import re
+import re, os
 from typing import Final
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import (
@@ -6,12 +6,12 @@ from telegram.ext import (
     filters, ContextTypes, ConversationHandler
 )
 
-TOKEN: Final = '7191747730:AAEGCy489UISkovfPOKQKCeVSzg6iwVqQwI'
-ADMIN_ID: Final = 7653881747  # ← твой Telegram ID
+TOKEN: Final = os.getenv('API_TOKEN')
+ADMIN_ID: Final = os.getenv('ADMIN_ID')
 
-# Определяем состояния для двух конверсаторов
-CONTACT, WAITING_FOR_REPLY = range(2)          # для "Связаться с нами"
-HELP_NAME, HELP_PHONE, HELP_TEXT = range(2, 5)   # для "Помощь со справкой"
+
+CONTACT, WAITING_FOR_REPLY = range(2)          
+HELP_NAME, HELP_PHONE, HELP_TEXT = range(2, 5)   
 
 main_menu = ReplyKeyboardMarkup(
     keyboard=[
@@ -23,11 +23,10 @@ main_menu = ReplyKeyboardMarkup(
 # Регулярное выражение для проверки российского номера (форматы: +7XXXXXXXXXX или 8XXXXXXXXXX)
 phone_pattern = re.compile(r"^(?:\+7|8)\d{10}$")
 
-# Обработчик команды /start
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("👋 Добро пожаловать! Чем я могу помочь?", reply_markup=main_menu)
 
-# --- Конверсация "Связаться с нами" ---
 async def contact_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("✏️ Напишите сообщение, и мы свяжемся с вами.")
     return CONTACT
@@ -47,7 +46,6 @@ async def handle_contact(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("✅ Ваше сообщение отправлено!")
     return ConversationHandler.END
 
-# --- Обработка нажатия кнопки "Ответить" для админа ---
 async def start_reply_to_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -82,7 +80,6 @@ async def handle_admin_reply(update: Update, context: ContextTypes.DEFAULT_TYPE)
     context.user_data.clear()
     return ConversationHandler.END
 
-# --- Конверсация "Помощь со справкой" ---
 async def help_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("✏️ Введите, пожалуйста, ваше имя:")
     return HELP_NAME
