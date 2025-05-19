@@ -164,15 +164,17 @@ if __name__ == "__main__":
     )
 
 # Конверсация для ответа администратора
-admin_conv = ConversationHandler(
-    entry_points=[CallbackQueryHandler(start_reply_to_user, pattern=r"^reply_to:\d+$")],
-    states={
-        WAITING_FOR_REPLY: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_admin_reply)]
-    },
-    fallbacks=[CommandHandler("cancel", cancel)],
-    per_user=True,
-    per_message=True
-)
+    admin_conv = ConversationHandler(
+        entry_points=[CallbackQueryHandler(start_reply_to_user, pattern=r"^reply_to:\d+$")],
+        states={
+            WAITING_FOR_REPLY: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_admin_reply)]
+        },
+        fallbacks=[CommandHandler("cancel", cancel)],
+        per_user=True,
+        per_message=True
+    )
+
+
     app.add_handler(CommandHandler("start", start))
     app.add_handler(contact_conv)
     app.add_handler(help_conv)
