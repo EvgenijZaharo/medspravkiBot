@@ -6,7 +6,7 @@ from telegram.ext import (
     filters, ContextTypes, ConversationHandler
 )
 
-TOKEN: Final = "7893443065:AAG9Fu_n_ej2MxajVHP_8Yub7SU3eZy3ihM"
+TOKEN: Final = os.getenv('API_TOKEN')
 ADMIN_ID: Final = os.getenv('ADMIN_ID')
 
 
